@@ -20,6 +20,7 @@ with serial.Serial('/dev/cu.usbmodem141101', 9600, timeout=1) as ser:
     while True:
         check, frame = video.read()
         faces = face_cascade.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=6, minSize=(200,200))
+        line = ser.readline()
     
         if len(faces) == 0 and no_face == False:
             no_face = True
@@ -27,14 +28,14 @@ with serial.Serial('/dev/cu.usbmodem141101', 9600, timeout=1) as ser:
         elif len(faces) == 0 and no_face == True and acc_on == False and (time.time()-start) > 10:
             print('start accelerometer')
             acc_on = True
-            steps_start = int(ser.readline().decode("utf-8"))
+            steps_start = int(line.decode("utf-8"))
         elif len(faces) != 0 and no_face == True:
             no_face = False
             start = time.time()
         elif len(faces) != 0 and no_face == False and acc_on == True and (time.time()-start) > 10:
             acc_on = False
             print('stop accelerometer')
-            steps_end = int(ser.readline().decode("utf-8"))
+            steps_end = int(line.decode("utf-8"))
             steps_total = steps_total + (steps_end - steps_start)
             print('steps: ', steps_end - steps_start)
             print('total steps: ', steps_total)
@@ -48,8 +49,6 @@ with serial.Serial('/dev/cu.usbmodem141101', 9600, timeout=1) as ser:
         elif (time.time() - vibration_time) > 5 and acc_on == False and vibrated == True:
             print('vibrate again')
             vibration_time = time.time()
-        
-        ser.readline()
 
         for x,y,w,h in faces:
             frame = cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0), 3)
