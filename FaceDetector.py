@@ -5,12 +5,15 @@ import serial
 no_face = False
 acc_on = False
 vibrated = False
+
 steps_start = 0
 steps_end = 0
 steps_total = 0
+
 start_working = time.time()
 vibration_time = time.time()
 start = time.time()
+
 face_cascade = cv2.CascadeClassifier('/Users/hassinh3/Documents/Other_studies/haarcascade_frontalface_default.xml')
 
 video = cv2.VideoCapture(0)
