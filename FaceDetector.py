@@ -36,12 +36,14 @@ with serial.Serial('/dev/cu.usbmodem141101', 9600, timeout=1) as ser:
             no_face = False
             start = time.time()
         elif len(faces) != 0 and no_face == False and acc_on == True and (time.time()-start) > 10:
-            acc_on = False
             print('stop accelerometer')
+            acc_on = False
+            
             steps_end = int(line.decode("utf-8"))
             steps_total = steps_total + (steps_end - steps_start)
             print('steps: ', steps_end - steps_start)
             print('total steps: ', steps_total)
+            
             vibrated = False
             start_working = time.time()
     
